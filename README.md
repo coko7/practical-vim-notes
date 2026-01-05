@@ -15,3 +15,4 @@ Chapters:
 10. [Copy and Paste](./10_copy_paste.md)
 11. [Macros](./11_macros.md)
 12. [Matching Patterns and Literals](./12_matching_patterns_and_literals.md)
+13. [Search](./13_search.md)
