@@ -60,3 +60,63 @@ Trying the same thing with a case-insensitive search `\c` will result in a sligh
 - That's because the case-insensitivity will match the updated match (uppercase) after applying the change and wont jump to the next one automatically
 
 ## 85. Create Complex Patterns by Iterating upon Search History
+
+- `q/` to bring the command-line window
+- `c%` to replace parentheses and inside
+
+```txt
+This string contains a 'quoted' word.
+This string contains 'two' quoted 'words.'
+This 'string doesn't make things easy.'
+```
+
+Replace all quoted strings single quotes by double quotes
+- `\v'(([^']|'\w)+)'`
+- `:%s//"\1"/g` (subtitute with empty search pattern '//' repeats the last search)
+
+## 86. Count the Matches for the Current Pattern
+
+### In Neovim
+
+**ℹ️ Neovim already count matches when searching (at bottom)**
+
+### In Vim
+
+Example:
+```js
+var buttons = viewport.buttons;
+viewport.buttons.previous.show();
+viewport.buttons.next.show();
+viewport.buttons.index.hide();
+```
+
+How to do it in plain vim:
+- `/\<buttons\>`
+- `:%s///gn` 
+    - '//' -> reuse last search
+    - 'n' flag suppresses usual behavior of subtitute to simply count matches instead
+
+With vimgrep:
+- `/\<buttons\>`
+- `:vimgrep //g %` -> populates the quick fix list with each match in current buffer
+    - '//' -> reuse last search
+    - '%' -> expands to filepath of current buffer
+- can now use `:cnext` and `:cprev` to move between matches (`n` and `N` still work)
+
+## 87. Search for the Current Visual Selection
+
+- `*` searches occurences of word under cursor
+- `:vmap X y/<C-R>"<CR>` (see `:h visual-search`)
+    - problems with '.' and '*'
+    - solution: *(might want to use lua instead to achieve the same in neovim)*
+    ```vim
+    xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+    xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+
+    function! s:VSetSearch(cmdtype)
+      let temp = @s
+      norm! gv"sy
+      let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+      let @s = temp
+    endfunction
+    ```
