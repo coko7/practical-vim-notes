@@ -16,3 +16,4 @@ Chapters:
 11. [Macros](./11_macros.md)
 12. [Matching Patterns and Literals](./12_matching_patterns_and_literals.md)
 13. [Search](./13_search.md)
+14. [Substitution](./14_substitution.md) *(w.i.p)*
